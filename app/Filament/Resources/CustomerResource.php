@@ -126,8 +126,6 @@ class CustomerResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
                 DeleteAction::make(),
-                ExportAction::make()
-                    ->exporter(CustomerExporter::class)
 
             ])
 
