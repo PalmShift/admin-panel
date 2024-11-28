@@ -130,8 +130,6 @@ class CustomerResource extends Resource
             ])
 
             ->headerActions([
-                ExportAction::make()
-                    ->exporter(CustomerExporter::class)
             ])
 
             ->bulkActions([
