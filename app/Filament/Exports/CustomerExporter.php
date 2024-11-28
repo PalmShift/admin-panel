@@ -24,7 +24,6 @@ class CustomerExporter extends Exporter
             ExportColumn::make('npeople'),
             ExportColumn::make('message'),
             ExportColumn::make('status'),
-            ExportColumn::make('table_number'),
         ];
     }
     public static function getCompletedNotificationBody(Export $export): string
