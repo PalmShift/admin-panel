@@ -33,7 +33,7 @@ class CustomerChart extends ChartWidget
                 'data' => $data->map(fn ($item) => $item->aggregate),
             ],
         ],
-        'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        'labels' => $data->map(fn ($item) => $item->month),
     ];
 
 
