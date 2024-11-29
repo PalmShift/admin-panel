@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Filament\Widgets;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use App\Filament\Resources\CustomerResource;
 use App\Models\Customer;
 use Flowframe\Trend\Trend;
@@ -17,31 +18,24 @@ class CustomerChart extends ChartWidget
     protected function getData(): array
     {
 
-        $data = Trend::model(Customer::class)
-            ->dateColumn('date')
-            ->between(
-                start: now()->startOfYear(),
-                end: now()->endOfYear(),
-            )
+        $data = DB::table('customers')
+        ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") as month'), DB::raw('COUNT(*) as aggregate'))
+        ->whereBetween('created_at', [now()->startOfYear(), now()->endOfYear()])
+        ->groupBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+        ->orderBy(DB::raw('DATE_FORMAT(created_at, "%Y-%m")'))
+        ->get();
 
-            ->perMonth()
-            ->count('*');
-            $data->each(function ($trend) {
-                // You can add a `groupBy()` here to fix the issue manually if needed
-                // or modify how TrendBuilder constructs the query.
-                $trend->date = \Carbon\Carbon::parse($trend->date)->format('Y-m');
-            });
-
-
-        return [
-            'datasets' => [
-                [
-                    'label' => 'Reservation',
-                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
-                ],
+    // Format the result into a structure that matches what Trend expects
+    return [
+        'datasets' => [
+            [
+                'label' => 'Reservations',
+                'data' => $data->map(fn ($item) => $item->aggregate),
             ],
-            'labels' => $data->map(fn (TrendValue $value) => $value->date),
-        ];
+        ],
+        'labels' => $data->map(fn ($item) => $item->month),
+    ];
+
 
 
 
