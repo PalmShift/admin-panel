@@ -17,6 +17,7 @@ class CustomerChart extends ChartWidget
     protected function getData(): array
     {
         $data = Trend::model(Customer::class)
+            ->dateColumn('date')
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
