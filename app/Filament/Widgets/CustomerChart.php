@@ -26,7 +26,11 @@ class CustomerChart extends ChartWidget
 
             ->perMonth()
             ->count('*');
-
+            $data->each(function ($trend) {
+                // You can add a `groupBy()` here to fix the issue manually if needed
+                // or modify how TrendBuilder constructs the query.
+                $trend->date = \Carbon\Carbon::parse($trend->date)->format('Y-m');
+            });
 
 
         return [
@@ -40,7 +44,9 @@ class CustomerChart extends ChartWidget
         ];
 
 
+
     }
+
 
     protected function getType(): string
     {
