@@ -18,12 +18,13 @@ class CustomerChart extends ChartWidget
     {
 
         $data = Trend::model(Customer::class)
-            ->dateColumn('date')
+
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
             )
             ->perMonth();
+            ->count()
 
 
 
