@@ -13,6 +13,11 @@ class CustomerChart extends ChartWidget
     protected static ?string $heading = 'Reservations';
     protected static string $color = 'info';
 
+    protected $casts = [
+        'date' => 'date',
+        'time' => 'datetime:H:i:s',
+    ];
+
     protected function getData(): array
     {
         $data = Trend::model(Customer::class)
