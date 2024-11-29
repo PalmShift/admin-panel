@@ -16,25 +16,27 @@ class CustomerChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = Trend::model(Customer::class)
-            ->dateColumn('date')
-            ->between(
-                start: now()->startOfYear(),
-                end: now()->endOfYear(),
-            )
-            ->perMonth()
-            ->count();
 
+        $data = DB::table('customers')
+        ->selectRaw('MONTH(`date`) as month, COUNT(*) as total')
+        ->whereYear('date', date('Y'))
+        ->groupByRaw('MONTH(`date`)')
+        ->get();
+
+        $monthlyData = collect(range(1, 12))->map(function ($month) use ($data) {
+            return $data->firstWhere('month', $month)?->total ?? 0;
+        });
 
         return [
             'datasets' => [
                 [
                     'label' => 'Reservation',
-                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                    'data' => $monthlyData,
                 ],
             ],
             'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        ];
+    ];
+
 
 
     }
