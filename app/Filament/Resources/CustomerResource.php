@@ -44,7 +44,7 @@ class CustomerResource extends Resource
         return $form
 
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('created_at')
                     ->required()
                     ->maxLength(50),
                 Forms\Components\TextInput::make('email')
