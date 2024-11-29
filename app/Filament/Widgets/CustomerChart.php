@@ -19,10 +19,10 @@ class CustomerChart extends ChartWidget
     {
 
         $data = DB::table('customers')
-        ->select(DB::raw('DATE_FORMAT(date, "%Y-%m") as month'), DB::raw('COUNT(*) as aggregate'))
+        ->select(DB::raw('DATE(date, "%Y-%m") as month'), DB::raw('COUNT(*) as aggregate'))
         ->whereBetween('date', [now()->startOfYear(), now()->endOfYear()])
-        ->groupBy(DB::raw('DATE_FORMAT(date, "%Y-%m")'))
-        ->orderBy(DB::raw('DATE_FORMAT(date, "%Y-%m")'))
+        ->groupBy(DB::raw('DATE(date, "%Y-%m")'))
+        ->orderBy(DB::raw('DATE(date, "%Y-%m")'))
         ->get();
 
     // Format the result into a structure that matches what Trend expects
