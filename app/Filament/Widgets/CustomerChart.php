@@ -19,21 +19,35 @@ class CustomerChart extends ChartWidget
     {
 
         $data = DB::table('customers')
-        ->select(DB::raw('DATE(date) as month'), DB::raw('COUNT(*) as aggregate'))
+        ->select(
+            DB::raw('MONTH(date) as month'), // Get month number
+            DB::raw('COUNT(*) as aggregate') // Count reservations per month
+        )
         ->whereBetween('date', [now()->startOfYear(), now()->endOfYear()])
-        ->groupBy(DB::raw('DATE(date)'))
-        ->orderBy(DB::raw('DATE(date)'))
+        ->groupBy(DB::raw('MONTH(date)')) // Group by month
+        ->orderBy(DB::raw('MONTH(date)')) // Order by month
         ->get();
 
-    // Format the result into a structure that matches what Trend expects
+    // Define the custom month labels
+    $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Prepare the data for the chart
+    $monthlyCounts = array_fill(0, 12, 0); // Initialize an array with 12 months, all counts set to 0
+
+    // Fill the array with actual counts for months that have data
+    foreach ($data as $item) {
+        $monthlyCounts[$item->month - 1] = $item->aggregate; // Adjust month (1-based index to 0-based)
+    }
+
+    // Return the data to the view or response
     return [
         'datasets' => [
             [
                 'label' => 'Reservations',
-                'data' => $data->map(fn ($item) => $item->aggregate),
+                'data' => $monthlyCounts,
             ],
         ],
-        'labels' => $data->map(fn ($item) => $item->month),
+        'labels' => $monthLabels,
     ];
 
 
