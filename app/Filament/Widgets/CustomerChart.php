@@ -17,27 +17,23 @@ class CustomerChart extends ChartWidget
     protected function getData(): array
     {
         $data = Trend::model(Customer::class)
-        ->dateColumn('date')
-        ->between(
-            start: now()->startOfYear(),
-            end: now()->endOfYear(),
-        )
-        ->perMonth()
-        ->count();
+            ->between(
+                start: now()->startOfYear(),
+                end: now()->endOfYear(),
+            )
+            ->perMonth()
+            ->count();
 
-    $labels = collect(range(1, 12))->map(fn($month) => now()->startOfYear()->addMonths($month - 1)->format('M'));
 
-    \Log::info('Trend Data:', $data->toArray());
-
-    return [
-        'datasets' => [
-            [
-                'label' => 'Reservations',
-                'data' => $data->map(fn(TrendValue $value) => $value->aggregate),
+        return [
+            'datasets' => [
+                [
+                    'label' => 'Reservation',
+                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                ],
             ],
-        ],
-        'labels' => $labels,
-    ];
+            'labels' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        ];
 
 
     }
