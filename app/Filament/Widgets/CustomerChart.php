@@ -18,7 +18,7 @@ class CustomerChart extends ChartWidget
     {
 
         $data = Trend::model(Customer::class)
-
+            #test
             ->between(
                 start: now()->startOfYear(),
                 end: now()->endOfYear(),
