@@ -23,7 +23,7 @@ class CustomerChart extends ChartWidget
                 end: now()->endOfYear(),
             )
             ->perMonth()
-            ->count('date');
+            ->count('*');
 
 
         return [
