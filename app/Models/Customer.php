@@ -9,7 +9,7 @@ class Customer extends Model
 {
     use HasFactory;
 
-    // Add 'name', 'email', and other fields you want to allow mass assignment
+
     protected $fillable = [
         'name',
         'email',
@@ -21,7 +21,7 @@ class Customer extends Model
         'status'
     ];
 
-    // If you want to allow timestamps (created_at and updated_at) to be automatically managed, ensure they're enabled
-    public $timestamps = true;
+
+    public $timestamps = false;
 }
 ?>
