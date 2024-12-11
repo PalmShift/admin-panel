@@ -43,6 +43,6 @@ class CustomerTime extends ChartWidget
 
     protected function getType(): string
     {
-        return 'pie';
+        return 'bar';
     }
 }
