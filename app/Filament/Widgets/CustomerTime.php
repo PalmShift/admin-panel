@@ -22,8 +22,8 @@ class CustomerTime extends ChartWidget
         ->select(
             DB::raw('CASE
                 WHEN time BETWEEN "10:00:00" AND "12:00:00" THEN "Morning"
-                WHEN time BETWEEN "12:00:01" AND "17:00:00" THEN "Afternoon"
-                WHEN time BETWEEN "17:00:01" AND "21:00:00" THEN "Evening"
+                WHEN time BETWEEN "12:00:01" AND "16:00:00" THEN "Afternoon"
+                WHEN time BETWEEN "17:00:00" AND "21:00:00" THEN "Evening"
                 ELSE "Night"
             END as time_of_day'),
             DB::raw('COUNT(*) as count')
