@@ -39,6 +39,6 @@ class CustomerWeek extends ChartWidget
 
     protected function getType(): string
     {
-        return 'polarArea';
+        return 'bubble';
     }
 }
