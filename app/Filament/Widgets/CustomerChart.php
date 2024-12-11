@@ -17,37 +17,20 @@ class CustomerChart extends ChartWidget
 
     protected function getData(): array
     {
-
         $data = DB::table('customers')
-        ->select(
-            DB::raw('MONTH(date) as month'), // Get month number
-            DB::raw('COUNT(*) as aggregate') // Count reservations per month
-        )
-        ->whereBetween('date', [now()->startOfYear(), now()->endOfYear()])
-        ->groupBy(DB::raw('MONTH(date)')) // Group by month
-        ->orderBy(DB::raw('MONTH(date)')) // Order by month
+        ->select('npeople', DB::raw('COUNT(*) as count'))
+        ->groupBy('npeople')
+        ->orderBy('npeople')
         ->get();
 
-    // Define the custom month labels
-    $monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-    // Prepare the data for the chart
-    $monthlyCounts = array_fill(0, 12, 0); // Initialize an array with 12 months, all counts set to 0
-
-    // Fill the array with actual counts for months that have data
-    foreach ($data as $item) {
-        $monthlyCounts[$item->month - 1] = $item->aggregate; // Adjust month (1-based index to 0-based)
-    }
-
-    // Return the data to the view or response
     return [
         'datasets' => [
             [
-                'label' => 'Reservations',
-                'data' => $monthlyCounts,
+                'label' => 'Reservations by Number of People',
+                'data' => $data->map(fn($item) => $item->count),
             ],
         ],
-        'labels' => $monthLabels,
+        'labels' => $data->map(fn($item) => $item->npeople),
     ];
 
 
